@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  db:
+    build: ./db
+    environment:
+      MYSQL_DATABASE: news_portal
+      MYSQL_ROOT_PASSWORD: password77
+      MYSQL_USER: mysql
+      MYSQL_PASSWORD: password77
+      DATABASE_HOST: db
+    command: --innodb_use_native_aio=0
+    volumes:
+      - ./db/mysqldata:/var/lib/mysql
+  web:
+    build: ./web
+    environment:
+      DATABASE_HOST: db
+      MYSQL_PORT: 3306
+      MYSQL_DATABASE: news_portal
+      MYSQL_USER: mysql
+      MYSQL_PASSWORD: password77
+    ports:
+      - "4000:4000"
+    depends_on:
+      - db
+    restart: on-failure 
